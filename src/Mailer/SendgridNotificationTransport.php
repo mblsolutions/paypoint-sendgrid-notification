@@ -29,7 +29,7 @@ class SendgridNotificationTransport implements TransportInterface
 
             // Create a custom MetadataHeader for unique_email_identifier
             $metadataHeader = new MetadataHeader(
-                'unique_email_identifier',
+                config('notification.unique_email_identifier'),
                 Str::uuid()
             );
 

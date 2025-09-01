@@ -43,7 +43,7 @@ class LoggingHttpClient implements HttpClientInterface
                 CreateNotificationLog::setUser($user);
             }
             // Log the request details here            
-            $message_id = $options['json']['personalizations'][0]['custom_args']['unique_email_identifier'] ?? Str::uuid();
+            $message_id = $options['json']['personalizations'][0]['custom_args'][config('notification.unique_email_identifier')] ?? Str::uuid();
             $request = [
                 'method' => $method,
                 'url' => $url,
