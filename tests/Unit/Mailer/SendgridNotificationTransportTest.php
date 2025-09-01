@@ -31,6 +31,7 @@ class SendgridNotificationTransportTest extends LaravelTestCase
         ]);
         Config::set('notification.max_loggable_length', 10024);
         Config::set('mail.mailers.sendgrid.dsn',env('SENDGRID_DSN'));
+        Config::set('notification.unique_email_identifier', env('SENDGRID_EMAIL_IDENTIFIER'));
         
     }
 
@@ -102,7 +103,7 @@ class SendgridNotificationTransportTest extends LaravelTestCase
             /**@var Email $email */
             $email = $sentMessage->getOriginalMessage();
             
-            $message_id = $email->getHeaders()->get('x-metadata-unique_email_identifier')->getValue();
+            $message_id = $email->getHeaders()->get('x-metadata-'.env('SENDGRID_EMAIL_IDENTIFIER'))->getValue();
 
             return $event->data['id'] === $message_id &&
                    $event->data['method'] === 'POST' &&

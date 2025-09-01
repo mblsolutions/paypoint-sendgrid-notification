@@ -65,5 +65,16 @@ return [
 
     'auth_guard' => null,
 
+    /*
+     |--------------------------------------------------------------------------
+     | Email Identifier Name
+     |--------------------------------------------------------------------------
+     |
+     | The email identifier being used by the other system to trace back
+     |
+     */
+
+     'unique_email_identifier' => env('SENDGRID_EMAIL_IDENTIFIER','mblsolutions'),
+
      
 ];
