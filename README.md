@@ -55,6 +55,8 @@ In environment setting, you need to change MAIL_MAILER from smtp to sendgrid to 
 ```dotenv
 MAIL_MAILER=sendgrid
 SENDGRID_DSN=sendgrid+api://[SECRET_KEY]@default
+#mblsolutions will be sat by default if .env is not sat in the below
+SENDGRID_EMAIL_IDENTIFIER=mblsolutions
 ```
 
 In mail setting, you need to add sendgrid in mailer.

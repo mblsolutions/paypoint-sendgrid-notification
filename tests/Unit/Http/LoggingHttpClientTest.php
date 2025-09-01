@@ -28,6 +28,7 @@ class LoggingHttpClientTest extends LaravelTestCase
         ]);
         Config::set('notification.max_loggable_length', 10024);
         Config::set('mail.mailers.sendgrid.dsn',env('SENDGRID_DSN'));
+        Config::set('notification.unique_email_identifier', env('SENDGRID_EMAIL_IDENTIFIER'));
         
     }
 
@@ -59,7 +60,7 @@ class LoggingHttpClientTest extends LaravelTestCase
                         ],
                         "subject" => "Test",
                         "custom_args" => [
-                            "unique_email_identifier" => $message_id
+                            env('SENDGRID_EMAIL_IDENTIFIER') => $message_id
                         ]
                     ]
                 ],
@@ -111,7 +112,7 @@ class LoggingHttpClientTest extends LaravelTestCase
                         ],
                         "subject" => "Test",
                         "custom_args" => [
-                            "unique_email_identifier" => $message_id
+                            env('SENDGRID_EMAIL_IDENTIFIER') => $message_id
                         ]
                     ]
                 ],

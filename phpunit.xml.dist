@@ -27,5 +27,6 @@
         <server name="DB_DATABASE" value=":memory:"/>
         <server name="MAIL_MAILER" value="sendgrid"/>
         <server name="SENDGRID_DSN" value="sendgrid+api://secretkey@default"/>
+        <server name="SENDGRID_EMAIL_IDENTIFIER" value="test-identifier"/>
     </php>
 </phpunit>
