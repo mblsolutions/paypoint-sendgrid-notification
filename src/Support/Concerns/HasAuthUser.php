@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 trait HasAuthUser
 {
-    protected User $authUser;
+    protected ?User $authUser;
 
     protected function initAuthUser()
     {
