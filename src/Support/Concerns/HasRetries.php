@@ -21,7 +21,7 @@ trait HasRetries
     /**
      * The number of seconds to wait before retrying the job.
      *
-     * @var int|array
+     * @var int
      */
     public int $backoff = 60;
 
@@ -34,7 +34,7 @@ trait HasRetries
     {
         $this->tries = config('notification.retries.tries', 3);
         $this->timeout = config('notification.retries.timeout', 60);
-        $this->backoff = config('notification.retries.backoff', 5);
+        $this->backoff = config('notification.retries.backoff', 60);
     }
     
     public function setTries (int $tries)
