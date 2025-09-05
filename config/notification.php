@@ -76,5 +76,37 @@ return [
 
      'unique_email_identifier' => env('SENDGRID_EMAIL_IDENTIFIER','mblsolutions'),
 
+     /*
+     |--------------------------------------------------------------------------
+     | Cool Down Period
+     |--------------------------------------------------------------------------
+     |
+     | The cool down period to resend welcome email
+     |
+     */
+
+     'cooldown' => [
+        'minutes' => env('NOTIFICATION_COOLDOWN_IN_MINUTES'),
+        'days' => env('NOTIFICATION_COOLDOWN_IN_DAYS'),
+        'months' => env('NOTIFICATION_COOLDOWN_IN_MONTHS'),
+        'years' => env('NOTIFICATION_COOLDOWN_IN_YEARS',1),
+     ],
+     
+     /*
+     |--------------------------------------------------------------------------
+     | Email Sending Setting
+     |--------------------------------------------------------------------------
+     |
+     | The send out setting like re-queue
+     |
+     */
+
+     'retries' => [
+        'tries' => env('NOTIFICATION_RETRIES_TIME',3),
+        'timeout' => env('NOTIFICATION_RETRIES_TIMEOUT',60),
+        'backoff' => env('NOTIFICATION_RETRIES_BACKOFF',60),
+     ]
+
+
      
 ];

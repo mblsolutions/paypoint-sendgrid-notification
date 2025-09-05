@@ -13,6 +13,7 @@ use PHPUnit\Util\Test;
 use Symfony\Component\Mailer\Bridge\Sendgrid\Transport\SendgridTransportFactory;
 use Symfony\Component\Mailer\Exception\HttpTransportException;
 use Symfony\Component\Mailer\Transport\Dsn;
+use Symfony\Component\Mailer\Header\MetadataHeader;
 
 class SendgridNotificationTransportTest extends LaravelTestCase
 {
@@ -134,5 +135,43 @@ class SendgridNotificationTransportTest extends LaravelTestCase
         Queue::assertNotPushed(CreateNotificationLog::class);
     }
 
+    #[Test]
+    public function test_successful_send_out_mail_notification_with_auth_user()
+    {
+        Queue::fake();
+
+        $dsn = Dsn::fromString(env('SENDGRID_DSN'));
+        $logClient = new LoggingHttpClient($this->mockHttpClient);
+        $sendgridApiTransport = (new SendgridTransportFactory(null, $logClient))->create($dsn);
+        // Instantiate your custom transport with the mocked API transport
+        $notificationTransport = new SendgridNotificationTransport($sendgridApiTransport);
+
+        $user_id = 1;
+        $message = new \Symfony\Component\Mime\Email();
+        // Create a custom MetadataHeader for auth user
+        $metadataHeader = new MetadataHeader(
+            'X-Auth-User-Id',
+            $user_id
+        );
+        $message->getHeaders()->add($metadataHeader);          
+        $message->from('sender@example.com')->to('recipient@example.com')->subject('Test')->text('Test');
+
+        $sentMessage = $notificationTransport->send($message);
+
+        $this->assertNotNull($sentMessage);
+        $this->assertEquals(202, $this->mockSuccessResponse->getStatusCode());
+        
+        Queue::assertPushed(CreateNotificationLog::class, function ($event) use ($sentMessage) {
+            /**@var Email $email */
+            $email = $sentMessage->getOriginalMessage();
+            
+            $user_id = $email->getHeaders()->get('x-metadata-x-auth-user-id')->getValue();
+
+            return $event->data['user_id'] === $user_id &&
+                   $event->data['method'] === 'POST' &&
+                   $event->data['status'] === 202;
+        });
+
+    }
 
 }

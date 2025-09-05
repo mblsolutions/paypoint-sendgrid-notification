@@ -67,6 +67,28 @@ In mail setting, you need to add sendgrid in mailer.
         'transport' => 'sendgrid',
         'dsn' => env('SENDGRID_DSN'),
     ],
+]
+```
+### Enable user information for logging in job
+
+If you would like to have user information in notification logs, you need to set user in authentication as in the example below:
+
+```php
+class SendEmail extends Notification implements ShouldQueue
+{
+    use HasAuthUser; //This trait is used to assign the auth user
+    
+    public function __construct()
+    {
+        $this->initAuthUser(); //needs to init $authUser
+    }
+
+    public function toMail($notifiable): SendgridMailMessage
+    {
+        //constructor MailMessage with $authUser
+        return (new SendgridMailMessage(($this->authUser)));
+    }
+}
 ```
 
 ## License

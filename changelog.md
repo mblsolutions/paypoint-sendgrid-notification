@@ -1,3 +1,10 @@
+## v1.0.2
++ Tickets
+    + AB#81566
++ Notes
+    + Fix the empty auth user in logging when running in queue
+    + Add HasRetries to resend email in queue
+
 ## v1.0.1
 + Tickets
     + AB#81566
