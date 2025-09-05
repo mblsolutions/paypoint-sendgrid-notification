@@ -80,7 +80,7 @@ class SendEmail extends Notification implements ShouldQueue
     
     public function __construct()
     {
-        $this->getAuthUser(); //needs to init $authUser
+        $this->initAuthUser(); //needs to init $authUser
     }
 
     public function toMail($notifiable): SendgridMailMessage
