@@ -1,6 +1,6 @@
 <?php
 
-namespace MBLSolutions\SendgridNotification\Support\Mail;
+namespace MBLSolutions\SendgridNotification\Message;
 
 use Symfony\Component\Mime\Email;
 use Illuminate\Foundation\Auth\User;
