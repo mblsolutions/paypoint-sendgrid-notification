@@ -25,27 +25,18 @@ class CreateNotificationLog implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(string $id, array $request, ResponseInterface $response)
+    public function __construct(string $id, array $request, ResponseInterface $response, $authUserId = null)
     {
-        $auth = Auth::guard(config('notification.auth_guard'));
         
         $this->data = [
             'id' => $id,
-            'user_id' => optional($auth->check()? $auth->user(): null)->getKey(),
+            'user_id' => $authUserId,
             'method' => $request['method'],
             'uri' => $request['url'],
             'status' => $response->getStatusCode(),
             'notification_request' => $this->handleBodyContentIfJson($request['request_body']),
             'notification_response' => $this->handleBodyContentIfJson($response->getContent(false)),          
         ];
-    }
-    
-    public static function setUser($user): void
-    {
-        if (config('notification.auth_guard')!=null){
-            $auth = Auth::guard(config('notification.auth_guard'));
-            $auth->setUser($user);
-        }
     }
 
     /**

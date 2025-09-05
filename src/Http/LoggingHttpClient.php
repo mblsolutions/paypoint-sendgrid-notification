@@ -37,19 +37,21 @@ class LoggingHttpClient implements HttpClientInterface
         $response = $this->client->request($method, $url, $options);
         
         // Add a condition to check for the SendGrid API domain
-        if (str_contains($url, $this->host)) {
-            $user = Auth::user();
-            if ($user){
-                CreateNotificationLog::setUser($user);
-            }
-            // Log the request details here            
-            $message_id = $options['json']['personalizations'][0]['custom_args'][config('notification.unique_email_identifier')] ?? Str::uuid();
+        if (str_contains($url, $this->host)) {            
+            $customArgs = &$options['json']['personalizations'][0]['custom_args'];
+            // Get the Auth User Id
+            $authUserId = $customArgs['X-Auth-User-Id']??null;
+            // Remove 'X-Auth-User-Id' from the original array
+            unset($customArgs['X-Auth-User-Id']);
+            
+            $message_id = $customArgs[config('notification.unique_email_identifier')] ?? Str::uuid();
+            // Log the request details here
             $request = [
                 'method' => $method,
                 'url' => $url,
                 'request_body' => \json_encode($options['json']) ?? null,
             ];
-            dispatch(new CreateNotificationLog($message_id,$request,$response));                         
+            dispatch(new CreateNotificationLog($message_id,$request,$response,$authUserId));                         
         }
          
         return $response;
